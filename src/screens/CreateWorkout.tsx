@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import InputExercise from '../components/InputExercise/InputExercise';
 import DefaultScreenButton from '../components/DefaultScreenButton/DefaultScreenButton';
-
+import { workoutType } from '../types/Workout/WorkoutType';
+import {v4 as uuidv4} from 'uuid';
+import { useNavigation } from '@react-navigation/native';
+import { addNewWorkout } from '../libs/SecureStore/Workout';
+import 'react-native-get-random-values';
 
 const CreateWorkout: React.FC = () => {
   const [inputExercises, setInputExercises] = useState<{ [key: string]: string }>({});
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [exercises, setExercises] = useState<string[]>([]);
   const [workoutName, setWorkoutName] = useState<string>('');
+  const navigation = useNavigation();
 
   const handleInputExerciseChange = (inputName: string,exerciseName:string) => {
     setInputExercises((prevInputValues) => ({ ...prevInputValues, [inputName]: exerciseName }));
@@ -17,6 +23,17 @@ const CreateWorkout: React.FC = () => {
   const handleSaveWorkout = () => {
     const nonEmptyInputs = Object.values(inputExercises).filter((value) => value.trim() !== '');
     setExercises(nonEmptyInputs);
+
+    const workout : workoutType = {
+      id: uuidv4(),
+      name: workoutName,
+      exercises: nonEmptyInputs,
+      createdAt: new Date(),
+    };
+
+    addNewWorkout(workout);
+    setInputExercises({});
+    navigation.navigate('Workouts' as never);
   };
 
   const handleAddInput = () => {
