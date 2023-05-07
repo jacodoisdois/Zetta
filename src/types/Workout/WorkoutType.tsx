@@ -1,5 +1,5 @@
 export type workoutType = {
-  id: string;
+  id?: string;
   name: string;
   exercises: string[];
   createdAt: Date;

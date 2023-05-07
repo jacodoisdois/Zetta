@@ -2,6 +2,7 @@ import CreateWorkout  from '../screens/CreateWorkout';
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import Workouts from '../screens/Workouts';
+import WorkoutRead from '../screens/WorkoutRead';
 const Stack = createStackNavigator();
 
 const WorkoutNavigation = () => {
@@ -10,6 +11,7 @@ const WorkoutNavigation = () => {
         headerShown:false,
       }} >
         <Stack.Screen name="Workouts" component={Workouts} />
+        <Stack.Screen name="WorkoutRead" component={WorkoutRead} />
         <Stack.Screen name="CreateWorkout" component={CreateWorkout}/>
       </Stack.Navigator>
   );

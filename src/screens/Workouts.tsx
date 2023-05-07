@@ -1,15 +1,43 @@
-import React from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {Text, StyleSheet, ScrollView } from 'react-native';
 import AddAbsoluteButton from '../components/AddAbsoluteButton/AddAbsoluteButton';
 import { retrieveData } from '../libs/SecureStore/Workout';
+import { LinearGradient } from 'expo-linear-gradient';
+import { workoutType } from '../types/Workout/WorkoutType';
+import WorkoutItem from '../components/WorkoutItem/WorkoutItem';
 
 const Workouts = () => {
+  const [workouts, setWorkouts] = useState<workoutType[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchWorkouts = async () => {
+      try {
+        const workoutString = await retrieveData('workouts');
+        const workouts = workoutString ? JSON.parse(workoutString) : [];
+        setWorkouts(workouts);
+        console.log('Workouts:', workouts);
+        setIsLoading(false);
+      } catch (error) {
+        console.log('Error fetching workouts:', error);
+        setIsLoading(false);
+      }
+    };
+
+    fetchWorkouts();
+  }, []);
+
   return (
-    <View style={styles.container}>
-      <View><Text>Test</Text></View>
+    <LinearGradient colors={['#62c0ff', '#44a8eb', '#61bbf7']} style={styles.container}>
+      <ScrollView>
+        {isLoading ? (
+          <Text>Loading...</Text>
+        ) : (
+          workouts.map((workout) => <WorkoutItem key={workout.id} workout={workout} />)
+        )}
+      </ScrollView>
       <AddAbsoluteButton screenName="CreateWorkout" />
-      <Button title="Test" onPress={() => retrieveData('workouts')} />
-    </View>
+    </LinearGradient>
   );
 };
 

@@ -1,27 +1,35 @@
-import React from 'react';
-import { Text, TouchableHighlight, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { CreateScreens } from '../../types/StringLiterals/CreateScreens';
+import { AntDesign } from '@expo/vector-icons';
 
 type AddAbsoluteButtonProps = {
   screenName: CreateScreens;
-}
+};
 
-const AddAbsoluteButton: React.FC<AddAbsoluteButtonProps> = ({screenName}) => {
+const AddAbsoluteButton: React.FC<AddAbsoluteButtonProps> = ({ screenName }) => {
   const navigation = useNavigation();
+  const [isPressed, setIsPressed] = useState(false);
 
   const handleScreenNavigation = () => {
-    navigation.navigate(screenName as never);
+    setIsPressed(true);
+    setTimeout(() => {
+      setIsPressed(false);
+      navigation.navigate(screenName as never);
+    }, 200);
   };
 
+  const buttonStyle = isPressed ? styles.buttonPressed : styles.button;
+
   return (
-    <TouchableHighlight
-      style={styles.button}
-      onPress={() => handleScreenNavigation()}
-      underlayColor="darkLayBlue"
+    <TouchableOpacity
+      style={buttonStyle}
+      activeOpacity={0.7}
+      onPress={handleScreenNavigation}
     >
-      <Text style={styles.buttonText}>Test</Text>
-    </TouchableHighlight>
+      <AntDesign name="plus" size={24} color="white" />
+    </TouchableOpacity>
   );
 };
 
@@ -30,9 +38,18 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 20,
     right: 20,
-    backgroundColor: 'blue',
+    backgroundColor: '#6bbcff',
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 360,
+  },
+  buttonPressed: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    backgroundColor: '#6bbcff',
+    padding: 10,
+    borderRadius: 360,
+    transform: [{ scale: 0.9 }],
   },
   buttonText: {
     color: 'white',

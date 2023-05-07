@@ -8,6 +8,7 @@ import {v4 as uuidv4} from 'uuid';
 import { useNavigation } from '@react-navigation/native';
 import { addNewWorkout } from '../libs/SecureStore/Workout';
 import 'react-native-get-random-values';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const CreateWorkout: React.FC = () => {
   const [inputExercises, setInputExercises] = useState<{ [key: string]: string }>({});
@@ -51,21 +52,24 @@ const CreateWorkout: React.FC = () => {
         <Text style={styles.contentHeaderText}>Workout Name:</Text>
         <InputExercise placeholder='Set the workout name' onChangeText={setWorkoutName} />
 
-        <View>
           <Text style={styles.contentHeaderText}>Exercises:</Text>
-          {Object.entries(inputExercises).map(([name]) => (
-            <InputExercise
-              key={name}
-              placeholder={`Exercise ${name.substring(5)}`}
-              onChangeText={(text) => { if(text && text !== '') handleInputExerciseChange(name, text)}}
-            />
-          ))}
-          <View style={styles.buttonContainer}>
-          <DefaultScreenButton buttonName="Create" onPress={handleSaveWorkout} />
-          <DefaultScreenButton buttonName="Add Input" onPress={handleAddInput} />
+
+          <View style={styles.scrollViewContainer}>
+            <ScrollView  contentInset={{bottom: Object.keys(inputExercises).length * 20}}>
+            {Object.entries(inputExercises).map(([name]) => (
+              <InputExercise
+                key={name}
+                placeholder={`Exercise ${name.substring(5)}`}
+                onChangeText={(text) => { if(text && text !== '') handleInputExerciseChange(name, text)}}
+              />
+            ))}
+            <View style={styles.buttonContainer}>
+            <DefaultScreenButton buttonName="Create" onPress={handleSaveWorkout} />
+            <DefaultScreenButton buttonName="Add Input" onPress={handleAddInput} />
+            </View>
+            </ScrollView>
           </View>
         </View>
-      </View>
     </LinearGradient>
   );
 };
@@ -93,6 +97,10 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },scrollViewContainer: {
+  },
+  scrollViewContent: {
+    height: 'min-content',
   },
 });
 
