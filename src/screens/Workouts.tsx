@@ -10,14 +10,22 @@ const Workouts = () => {
   const [workouts, setWorkouts] = useState<workoutType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const handleUpdateWorkouts = async () => {
+    try {
+      const workoutString = await retrieveData('workouts');
+      const workouts = workoutString ? JSON.parse(workoutString) : [];
+      setWorkouts(workouts);
+      console.log('Workouts:', workouts);
+      setIsLoading(false);
+    } catch (error) {
+      console.log('Error fetching workouts:', error);
+    }
+  };
+
   useEffect(() => {
     const fetchWorkouts = async () => {
       try {
-        const workoutString = await retrieveData('workouts');
-        const workouts = workoutString ? JSON.parse(workoutString) : [];
-        setWorkouts(workouts);
-        console.log('Workouts:', workouts);
-        setIsLoading(false);
+        handleUpdateWorkouts();
       } catch (error) {
         console.log('Error fetching workouts:', error);
         setIsLoading(false);
@@ -33,10 +41,10 @@ const Workouts = () => {
         {isLoading ? (
           <Text>Loading...</Text>
         ) : (
-          workouts.map((workout) => <WorkoutItem key={workout.id} workout={workout} />)
+          workouts.map((workout) => <WorkoutItem key={workout.id} workout={workout} callBack={handleUpdateWorkouts} />)
         )}
       </ScrollView>
-      <AddAbsoluteButton screenName="CreateWorkout" />
+      <AddAbsoluteButton screenName="CreateWorkout"  callBack={handleUpdateWorkouts}/>
     </LinearGradient>
   );
 };

@@ -4,13 +4,14 @@ import { Text, TouchableHighlight, StyleSheet } from 'react-native';
 type DefaultScreenButtonProps = {
   buttonName: string;
   onPress: () => void;
+  color: string;
 }
 
-const DefaultScreenButton: React.FC<DefaultScreenButtonProps> = ({buttonName, onPress}) => {
+const DefaultScreenButton: React.FC<DefaultScreenButtonProps> = ({buttonName, onPress, color} : DefaultScreenButtonProps) => {
 
   return (
     <TouchableHighlight
-      style={styles.button}
+      style={[styles.button, {backgroundColor: color}]}
       underlayColor="darkLayBlue"
       onPress={onPress}
     >
@@ -21,7 +22,6 @@ const DefaultScreenButton: React.FC<DefaultScreenButtonProps> = ({buttonName, on
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#1E90FF',
     padding: 10,
     borderRadius: 5,
     marginVertical: 10,

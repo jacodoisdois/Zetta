@@ -5,10 +5,14 @@ import InputExercise from '../components/InputExercise/InputExercise';
 import DefaultScreenButton from '../components/DefaultScreenButton/DefaultScreenButton';
 import { workoutType } from '../types/Workout/WorkoutType';
 import {v4 as uuidv4} from 'uuid';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { addNewWorkout } from '../libs/SecureStore/Workout';
 import 'react-native-get-random-values';
 import { ScrollView } from 'react-native-gesture-handler';
+
+type WorkouCreateRouteParams = {
+  callBack: () => void;
+};
 
 const CreateWorkout: React.FC = () => {
   const [inputExercises, setInputExercises] = useState<{ [key: string]: string }>({});
@@ -16,12 +20,15 @@ const CreateWorkout: React.FC = () => {
   const [exercises, setExercises] = useState<string[]>([]);
   const [workoutName, setWorkoutName] = useState<string>('');
   const navigation = useNavigation();
+  const route = useRoute();
+  const { callBack }: WorkouCreateRouteParams = route.params as WorkouCreateRouteParams;
+
 
   const handleInputExerciseChange = (inputName: string,exerciseName:string) => {
     setInputExercises((prevInputValues) => ({ ...prevInputValues, [inputName]: exerciseName }));
   };
 
-  const handleSaveWorkout = () => {
+  const handleSaveWorkout = async () => {
     const nonEmptyInputs = Object.values(inputExercises).filter((value) => value.trim() !== '');
     setExercises(nonEmptyInputs);
 
@@ -31,10 +38,11 @@ const CreateWorkout: React.FC = () => {
       exercises: nonEmptyInputs,
       createdAt: new Date(),
     };
-
-    addNewWorkout(workout);
+    console.log('Callback:', callBack);
+    await addNewWorkout(workout);
     setInputExercises({});
-    navigation.navigate('Workouts' as never);
+    callBack();
+    navigation.goBack();
   };
 
   const handleAddInput = () => {
@@ -64,8 +72,8 @@ const CreateWorkout: React.FC = () => {
               />
             ))}
             <View style={styles.buttonContainer}>
-            <DefaultScreenButton buttonName="Create" onPress={handleSaveWorkout} />
-            <DefaultScreenButton buttonName="Add Input" onPress={handleAddInput} />
+            <DefaultScreenButton buttonName="Create" onPress={handleSaveWorkout} color='#1E90FF' />
+            <DefaultScreenButton buttonName="Add Input" onPress={handleAddInput} color='#1E90FF' />
             </View>
             </ScrollView>
           </View>

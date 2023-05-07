@@ -1,22 +1,25 @@
 import React, { useState } from 'react';
-import { TouchableOpacity, StyleSheet } from 'react-native';
+import { TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { CreateScreens } from '../../types/StringLiterals/CreateScreens';
 import { AntDesign } from '@expo/vector-icons';
+import { NativeStackNavigationProp } from "@react-navigation/native-stack/lib/typescript/src/types";
 
 type AddAbsoluteButtonProps = {
   screenName: CreateScreens;
+  callBack?: () => void;
 };
 
-const AddAbsoluteButton: React.FC<AddAbsoluteButtonProps> = ({ screenName }) => {
-  const navigation = useNavigation();
+const AddAbsoluteButton: React.FC<AddAbsoluteButtonProps> = ({ screenName, callBack }: AddAbsoluteButtonProps) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const navigator = useNavigation<NativeStackNavigationProp<any>>();
   const [isPressed, setIsPressed] = useState(false);
 
   const handleScreenNavigation = () => {
     setIsPressed(true);
     setTimeout(() => {
       setIsPressed(false);
-      navigation.navigate(screenName as never);
+      navigator.navigate(screenName, { callBack });
     }, 200);
   };
 
@@ -41,6 +44,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#6bbcff',
     padding: 10,
     borderRadius: 360,
+    ...Platform.select({
+      ios: {
+        shadowColor: 'black',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 3,
+      },
+    }),
   },
   buttonPressed: {
     position: 'absolute',
