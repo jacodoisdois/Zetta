@@ -2,24 +2,22 @@ import React from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { workoutType } from '../types/Workout/WorkoutType';
-import moment from 'moment';
 import DefaultScreenButton from '../components/DefaultScreenButton/DefaultScreenButton';
 import { ScrollView } from 'react-native-gesture-handler';
 import { deleteWorkoutById } from '../libs/SecureStore/Workout';
 
 type WorkoutReadRouteParams = {
   workout?: workoutType;
-  callBack: () => void;
+  callBack?: () => void;
 };
 
 export default function WorkoutRead() {
   const route = useRoute();
-  const { workout, callBack }: WorkoutReadRouteParams = route.params as WorkoutReadRouteParams;
+  const { workout }: WorkoutReadRouteParams = route.params as WorkoutReadRouteParams;
   const navigation = useNavigation();
 
   const handleDeleteWorkout = async () => {
     await deleteWorkoutById(workout?.id || '');
-    callBack();
     navigation.navigate('Workouts' as never);
   };
 

@@ -1,62 +1,87 @@
-import React, { useEffect, useState } from 'react';
-import {Text, StyleSheet, ScrollView } from 'react-native';
-import AddAbsoluteButton from '../components/AddAbsoluteButton/AddAbsoluteButton';
-import { retrieveData } from '../libs/SecureStore/Workout';
-import { LinearGradient } from 'expo-linear-gradient';
-import { workoutType } from '../types/Workout/WorkoutType';
-import WorkoutItem from '../components/WorkoutItem/WorkoutItem';
+import React, { useState, useEffect } from "react";
+import { View, Text, StyleSheet, FlatList } from "react-native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../types/Navigation/WorkNavigation";
+import WorkoutItem from "../components/WorkoutItem/WorkoutItem";
+import { retrieveData, deleteWorkoutById } from "../libs/SecureStore/Workout";
+import { workoutType } from "../types/Workout/WorkoutType";
+import { WorkoutItemProps } from "../types/Components/WorkoutItem";
+import AddAbsoluteButton from "../components/AddAbsoluteButton/AddAbsoluteButton";
 
-const Workouts = () => {
-  const [workouts, setWorkouts] = useState<workoutType[]>([]);
+type WorkoutsScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  "Workouts"
+>;
+
+type WorkoutsProps = {
+  navigation: WorkoutsScreenNavigationProp;
+};
+
+const Workouts: React.FC<WorkoutsProps> = ({ navigation }) => {
+  const [workouts, setWorkouts] = useState<Array<workoutType>>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const handleUpdateWorkouts = async () => {
+  const handleFetchWorkouts = async () => {
     try {
-      const workoutString = await retrieveData('workouts');
+      const workoutString = await retrieveData("workouts");
       const workouts = workoutString ? JSON.parse(workoutString) : [];
       setWorkouts(workouts);
-      console.log('Workouts:', workouts);
       setIsLoading(false);
     } catch (error) {
-      console.log('Error fetching workouts:', error);
+      console.log("Error fetching workouts:", error);
     }
   };
 
   useEffect(() => {
-    const fetchWorkouts = async () => {
-      try {
-        handleUpdateWorkouts();
-      } catch (error) {
-        console.log('Error fetching workouts:', error);
-        setIsLoading(false);
-      }
-    };
+    handleFetchWorkouts();
 
-    fetchWorkouts();
-  }, []);
+    const unsubscribe = navigation.addListener("focus", handleFetchWorkouts);
+
+    return unsubscribe;
+  }, [navigation]);
+
+  const handleDeleteWorkout = async (id: string) => {
+    await deleteWorkoutById(id);
+    handleFetchWorkouts();
+  };
+
+  const renderWorkoutItem = ({ item }: { item: workoutType }) => {
+    const onPress = () => navigation.navigate("WorkoutRead", { workout: item });
+
+    const onDelete = () => handleDeleteWorkout(item.id as string);
+
+    const props: WorkoutItemProps = { workout: item, onPress, onDelete };
+
+    return <WorkoutItem {...props} />;
+  };
+
+  const keyExtractor = (item: workoutType) => item.id as string;
 
   return (
-    <LinearGradient colors={['#62c0ff', '#44a8eb', '#61bbf7']} style={styles.container}>
-      <ScrollView>
-        {isLoading ? (
-          <Text>Loading...</Text>
-        ) : (
-          workouts.map((workout) => <WorkoutItem key={workout.id} workout={workout} callBack={handleUpdateWorkouts} />)
-        )}
-      </ScrollView>
-      <AddAbsoluteButton screenName="CreateWorkout"  callBack={handleUpdateWorkouts}/>
-    </LinearGradient>
+    <View style={styles.container}>
+      {isLoading ? (
+        <Text>Loading...</Text>
+      ) : (
+        <FlatList
+          data={workouts}
+          renderItem={renderWorkoutItem}
+          keyExtractor={keyExtractor}
+          contentContainerStyle={styles.listContainer}
+        />
+      )}
+      <AddAbsoluteButton screenName="CreateWorkout"/>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
   },
-  content: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  listContainer: {
+    paddingBottom: 16,
   },
 });
 

@@ -11,7 +11,7 @@ import 'react-native-get-random-values';
 import { ScrollView } from 'react-native-gesture-handler';
 
 type WorkouCreateRouteParams = {
-  callBack: () => void;
+  callBack?: () => void;
 };
 
 const CreateWorkout: React.FC = () => {
@@ -41,7 +41,6 @@ const CreateWorkout: React.FC = () => {
     console.log('Callback:', callBack);
     await addNewWorkout(workout);
     setInputExercises({});
-    callBack();
     navigation.goBack();
   };
 

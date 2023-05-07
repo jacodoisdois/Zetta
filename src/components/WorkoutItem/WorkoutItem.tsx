@@ -1,30 +1,28 @@
 import React from "react";
 import { Text, StyleSheet, Platform } from "react-native";
-import { workoutType } from "../../types/Workout/WorkoutType";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import moment from 'moment';
-import { useNavigation } from "@react-navigation/native";
+import moment from "moment";
+import { WorkoutItemProps } from "../../types/Components/WorkoutItem";
 import { WorkoutReadScreenNavigationProp } from "../../types/Navigation/WorkNavigation";
+import { useNavigation } from "@react-navigation/native";
 
-type WorkoutItemProps = {
-  workout: workoutType;
-  callBack: () => void;
-};
+const WorkoutItem: React.FC<WorkoutItemProps> = ({ workout }) => {
 
-export default function WorkoutItem({ workout, callBack }: WorkoutItemProps) {
   const navigator = useNavigation<WorkoutReadScreenNavigationProp>();
 
   const handleWorkoutPress = () => {
-    navigator.navigate('WorkoutRead', { workout, callBack });
+    navigator.navigate("WorkoutRead", { workout });
   };
 
   return (
-    <TouchableOpacity style={styles.container} onPress={handleWorkoutPress}>
-      <Text style={styles.titleText}>{workout.name || 'N/A'}</Text>
-      <Text>{moment(workout.createdAt).format('DD/MM/YYYY HH:mm')}</Text>
+    <TouchableOpacity style={styles.container} onPress={handleWorkoutPress} >
+      <Text style={styles.titleText}>{workout.name || "N/A"}</Text>
+      <Text>
+        {moment(workout.createdAt).format("DD/MM/YYYY HH:mm")}
+      </Text>
     </TouchableOpacity>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -37,7 +35,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     ...Platform.select({
       ios: {
-        shadowColor: 'black',
+        shadowColor: "black",
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.3,
         shadowRadius: 4,
@@ -50,5 +48,7 @@ const styles = StyleSheet.create({
   titleText: {
     fontWeight: "bold",
     fontSize: 20,
-  }
+  },
 });
+
+export default WorkoutItem;
