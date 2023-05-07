@@ -32,14 +32,20 @@ export default function WorkoutRead() {
   }
 
   return (
+    <View style={styles.container}>
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>{workout.name}</Text>
-      {workout.exercises.map((exercise, count) => (
-        <Text key={count}>{`${count + 1} - ${exercise}`}</Text>
-      ))}
-      <Text>{moment(workout.createdAt).format('DD/MM/YYYY HH:mm')}</Text>
-      <DefaultScreenButton buttonName="Delete" onPress={handleDeleteWorkout} color="#f83e3e" />
+      <Text style={styles.title}>Workout - {workout.name}</Text>
+      <View style={styles.exercisesContainer}>
+        <Text style={styles.exercisesText}>Exercises:</Text>
+        {workout.exercises.map((exercise, count) => (
+          <Text key={count}>{`${count + 1} - ${exercise}`}</Text>
+        ))}
+      </View>
     </ScrollView>
+      <View style={styles.actionsContainer}>
+      <DefaultScreenButton buttonName="Delete" onPress={handleDeleteWorkout} color="#f83e3e" />
+      </View>
+    </View>
   );
 }
 
@@ -47,12 +53,32 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
   },
   title: {
     fontWeight: 'bold',
     fontSize: 30,
-    position: 'absolute',
-    top: 50,
+    marginBottom: 30,
   },
+  exercisesContainer: {
+    marginLeft: 20,
+    marginBottom: 20,
+  },
+  exercisesText: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 10,
+  },
+  timestamp: {
+    fontStyle: 'italic',
+    marginLeft: 20,
+    fontSize: 12,
+    alignSelf: 'flex-start'
+  },
+  actionsContainer: {
+    flex: 1,
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    position: 'absolute',
+    bottom: 0,
+  }
 });
