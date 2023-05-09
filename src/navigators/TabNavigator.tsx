@@ -6,7 +6,7 @@ import { FontAwesome5, FontAwesome, AntDesign } from '@expo/vector-icons';
 
 import Diary from '../screens/Diary';
 import WorkoutNavigation from './WorkoutNavigation';
-import CurrentWorkout from '../screens/CurrentWorkout';
+import CurrentWorkout from '../screens/CreateDiary';
 const Tab = createBottomTabNavigator();
 import TabBarIconWrapper from '../components/TabBarIconWrapper/TabBarIconWrapper';
 

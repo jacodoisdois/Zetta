@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import { Text, StyleSheet, FlatList } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../types/Navigation/WorkNavigation";
 import WorkoutItem from "../components/WorkoutItem/WorkoutItem";
@@ -7,6 +7,7 @@ import { retrieveData, deleteWorkoutById } from "../libs/SecureStore/Workout";
 import { workoutType } from "../types/Workout/WorkoutType";
 import { WorkoutItemProps } from "../types/Components/WorkoutItem";
 import AddAbsoluteButton from "../components/AddAbsoluteButton/AddAbsoluteButton";
+import { LinearGradient } from "expo-linear-gradient";
 
 type WorkoutsScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -58,7 +59,7 @@ const Workouts: React.FC<WorkoutsProps> = ({ navigation }) => {
   const keyExtractor = (item: workoutType) => item.id as string;
 
   return (
-    <View style={styles.container}>
+    <LinearGradient colors={['#62c0ff', '#44a8eb', '#61bbf7']} style={styles.container}>
       {isLoading ? (
         <Text>Loading...</Text>
       ) : (
@@ -70,7 +71,7 @@ const Workouts: React.FC<WorkoutsProps> = ({ navigation }) => {
         />
       )}
       <AddAbsoluteButton screenName="CreateWorkout"/>
-    </View>
+      </LinearGradient>
   );
 };
 
@@ -82,6 +83,7 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     paddingBottom: 16,
+    minWidth: "100%",
   },
 });
 
