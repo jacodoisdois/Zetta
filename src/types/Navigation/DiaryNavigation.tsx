@@ -1,7 +1,6 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import { DiaryType } from '../Diary/DiaryType';
 import { RootStackParamList } from './General';
-import { RouteProp } from '@react-navigation/native';
 
 export type DiariesScreenParams = {
   diaries: DiaryType[];

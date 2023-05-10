@@ -118,6 +118,7 @@ const CreateDiary = ({ navigation }: CreateDiaryProps) => {
           <Picker
             selectedValue={selectedWorkout?.id}
             onValueChange={handleSelectWorkout}
+            itemStyle={styles.pickerText}
           >
             <Picker.Item />
             {workouts.map((workout) => (
@@ -135,7 +136,7 @@ const CreateDiary = ({ navigation }: CreateDiaryProps) => {
               const currentAmount = exerciseWeight?.value || 0;
               return (
                 <View style={styles.exerciseContainer} key={exercise}>
-                  <Text>{exercise}:</Text>
+                  <Text style={styles.exerciseText}>{exercise}:</Text>
                   <InputExercise
                     placeholder='Amount'
                     onChangeText={(amount) => handleAmountInputChange(exercise, parseInt(amount))}
@@ -143,10 +144,12 @@ const CreateDiary = ({ navigation }: CreateDiaryProps) => {
                   <Picker
                     selectedValue={exerciseWeight?.unit || 'kg'}
                     onValueChange={(unit) => handleExerciseWeightChange(exercise, currentAmount, unit)}
+                    style={styles.picker}
+                    itemStyle={styles.pickerText}
                   >
                     <Picker.Item label="kg" value="kg" />
                     <Picker.Item label="lbs" value="lbs" />
-                    <Picker.Item label="minutes" value="minutes" />
+                    <Picker.Item label="minutes" value="minutes"/>
                   </Picker>
                 </View>
               );
@@ -172,12 +175,28 @@ const styles = StyleSheet.create({
     fontSize: 20,
     alignSelf: 'center',
     marginVertical: 15,
+    color: 'white',
   },
   contentContainer: {
     marginHorizontal: 20,
   },
   exerciseContainer: {
     justifyContent: 'space-evenly',
+  },
+  picker:{
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderColor: 'white',
+    marginVertical: 10,
+    borderRadius: 5,
+  },
+  exerciseText:{
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  pickerText: {
+    color: 'white',
   }
 });
 

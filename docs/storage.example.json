@@ -20,7 +20,7 @@
         "workoutAlias": "A",
         "exercisesWeight": [
           {
-            "exerciseAlias": "01",
+            "exercise": "BenchPress",
             "value": 100,
             "unit": "kg"
           }
