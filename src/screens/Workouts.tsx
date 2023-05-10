@@ -1,24 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Text, StyleSheet, FlatList } from "react-native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../types/Navigation/WorkNavigation";
 import WorkoutItem from "../components/WorkoutItem/WorkoutItem";
-import { retrieveData, deleteWorkoutById } from "../libs/SecureStore/Workout";
+import { retrieveData } from "../libs/SecureStore/General";
+import { deleteWorkoutById } from "../libs/SecureStore/Workout";
 import { workoutType } from "../types/Workout/WorkoutType";
 import { WorkoutItemProps } from "../types/Components/WorkoutItem";
 import AddAbsoluteButton from "../components/AddAbsoluteButton/AddAbsoluteButton";
 import { LinearGradient } from "expo-linear-gradient";
+import { WorkoutsProps } from "../types/Navigation/WorkoutNavigation";
 
-type WorkoutsScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  "Workouts"
->;
 
-type WorkoutsProps = {
-  navigation: WorkoutsScreenNavigationProp;
-};
-
-const Workouts: React.FC<WorkoutsProps> = ({ navigation }) => {
+const Workouts = ({ navigation } : WorkoutsProps) => {
   const [workouts, setWorkouts] = useState<Array<workoutType>>([]);
   const [isLoading, setIsLoading] = useState(true);
 

@@ -5,14 +5,10 @@ import InputExercise from '../components/InputExercise/InputExercise';
 import DefaultScreenButton from '../components/DefaultScreenButton/DefaultScreenButton';
 import { workoutType } from '../types/Workout/WorkoutType';
 import {v4 as uuidv4} from 'uuid';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { addNewWorkout } from '../libs/SecureStore/Workout';
 import 'react-native-get-random-values';
+import { useNavigation } from '@react-navigation/native';
+import { addNewWorkout } from '../libs/SecureStore/Workout';
 import { ScrollView } from 'react-native-gesture-handler';
-
-type WorkouCreateRouteParams = {
-  callBack?: () => void;
-};
 
 const CreateWorkout: React.FC = () => {
   const [inputExercises, setInputExercises] = useState<{ [key: string]: string }>({});
@@ -20,8 +16,6 @@ const CreateWorkout: React.FC = () => {
   const [exercises, setExercises] = useState<string[]>([]);
   const [workoutName, setWorkoutName] = useState<string>('');
   const navigation = useNavigation();
-  const route = useRoute();
-  const { callBack }: WorkouCreateRouteParams = route.params as WorkouCreateRouteParams;
 
 
   const handleInputExerciseChange = (inputName: string,exerciseName:string) => {
@@ -38,7 +32,6 @@ const CreateWorkout: React.FC = () => {
       exercises: nonEmptyInputs,
       createdAt: new Date(),
     };
-    console.log('Callback:', callBack);
     await addNewWorkout(workout);
     setInputExercises({});
     navigation.goBack();

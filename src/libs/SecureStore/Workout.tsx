@@ -1,22 +1,9 @@
 import * as SecureStore from 'expo-secure-store';
 import { workoutType } from '../../types/Workout/WorkoutType';
+import { retrieveData } from './General';
 
 
-export const retrieveData = async (key: string): Promise<string | null> => {
-  try {
-    const value = await SecureStore.getItemAsync(key);
-    if (value) {
-      console.log('Retrieved value:', value);
-      return value;
-    } else {
-      console.log('Value not found.');
-      return null;
-    }
-  } catch (error) {
-    console.log('Error retrieving value:', error);
-    return null;
-  }
-};
+
 
 export const addNewWorkout = async (workout: workoutType): Promise<void> => {
   try {
@@ -60,3 +47,5 @@ export const deleteWorkoutById = async (id: string): Promise<void> => {
     console.log('Error deleting workout:', error);
   }
 };
+export { retrieveData };
+

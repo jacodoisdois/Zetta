@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5, FontAwesome, AntDesign } from '@expo/vector-icons';
 
-import Diary from '../screens/Diary';
+import Diaries from '../screens/Diaries';
 import WorkoutNavigation from './WorkoutNavigation';
 import CurrentWorkout from '../screens/CreateDiary';
 const Tab = createBottomTabNavigator();
@@ -47,7 +47,7 @@ const TabNavigator = () => {
     tabBarInactiveTintColor: '#a6dcf0',
   }}
 >
-        <Tab.Screen name="Diary" component={Diary} options={
+        <Tab.Screen name="Diary" component={Diaries} options={
           {
             tabBarIcon: ({ color, size }) => (
               <FontAwesome name="calendar" size={size} color={color} />

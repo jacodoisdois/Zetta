@@ -3,12 +3,12 @@ import { Text, StyleSheet, Platform } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import moment from "moment";
 import { WorkoutItemProps } from "../../types/Components/WorkoutItem";
-import { WorkoutReadScreenNavigationProp } from "../../types/Navigation/WorkNavigation";
+import { WorkoutItemScreenNavigationProp } from "../../types/Navigation/WorkoutNavigation";
 import { useNavigation } from "@react-navigation/native";
 
 const WorkoutItem: React.FC<WorkoutItemProps> = ({ workout }) => {
 
-  const navigator = useNavigation<WorkoutReadScreenNavigationProp>();
+  const navigator = useNavigation<WorkoutItemScreenNavigationProp>();
 
   const handleWorkoutPress = () => {
     navigator.navigate("WorkoutRead", { workout });
@@ -17,7 +17,7 @@ const WorkoutItem: React.FC<WorkoutItemProps> = ({ workout }) => {
   return (
     <TouchableOpacity style={styles.container} onPress={handleWorkoutPress} >
       <Text style={styles.titleText}>Workout - {workout.name || "N/A"}</Text>
-      <Text>
+      <Text>3
         {moment(workout.createdAt).format("DD/MM/YYYY HH:mm")}
       </Text>
     </TouchableOpacity>

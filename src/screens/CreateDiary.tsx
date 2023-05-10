@@ -1,16 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
-import { NavigationProps } from '../types/Navigation/DiaryNavigation';
-import { retrieveData } from '../libs/SecureStore/Workout';
+import { CreateDiaryProps } from '../types/Navigation/DiaryNavigation';
+import { retrieveData } from '../libs/SecureStore/General';
 import { workoutType } from '../types/Workout/WorkoutType';
 import { Picker } from '@react-native-picker/picker';
 import DefaultScreenButton from '../components/DefaultScreenButton/DefaultScreenButton';
 import InputExercise from '../components/InputExercise/InputExercise';
+import { DiaryType, ExercisesWeightType } from '../types/Diary/DiaryType';
+import { ScrollView } from 'react-native-gesture-handler';
+import {v4 as uuidv4} from 'uuid';
+import 'react-native-get-random-values';
+import { formatDate } from '../utils/formatDate';
+import { saveDiary } from '../libs/SecureStore/Diary';
+import { LinearGradient } from 'expo-linear-gradient';
 
-const CreateDiary = ({ navigation }: NavigationProps) => {
+const CreateDiary = ({ navigation }: CreateDiaryProps) => {
   const [workouts, setWorkouts] = useState<Array<workoutType>>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedWorkout, setSelectedWorkout] = useState<workoutType>();
+  const [exercisesWeight, setExercisesWeight] = useState<ExercisesWeightType[]>([]);
+
+  useEffect(() => {
+    handleFetchWorkouts();
+    const unsubscribe = navigation.addListener("focus", handleFetchWorkouts);
+
+    return unsubscribe;
+  }, [navigation]);
 
   const handleFetchWorkouts = async () => {
     try {
@@ -24,21 +39,71 @@ const CreateDiary = ({ navigation }: NavigationProps) => {
     }
   };
 
-  useEffect(() => {
-    handleFetchWorkouts();
-
-    const unsubscribe = navigation.addListener('focus', handleFetchWorkouts);
-    return unsubscribe;
-  }, [navigation]);
 
   const handleSelectWorkout = async (workoutId: string) => {
     const foundWorkout = workouts.find((workout) => workout.id === workoutId);
     setSelectedWorkout(foundWorkout);
+
+    if (foundWorkout) {
+      const initialExercisesWeight: ExercisesWeightType[] = foundWorkout.exercises.map((exercise) => ({
+        exercise,
+        value: 0,
+        unit: 'kg',
+      }));
+      setExercisesWeight(initialExercisesWeight);
+    }
   };
 
-  const [selectedUnit, setSelectedUnit] = useState<string>('kg');
-  const handleSelectUnit = (unit: string) => {
-    setSelectedUnit(unit);
+  const handleSaveButtonPress = async () => {
+    const date = new Date();
+    const newDiary: DiaryType = {
+      id: uuidv4(),
+      createdAt: date,
+      diaryDate: formatDate(date),
+      workoutId: selectedWorkout?.id || '',
+      exercises: exercisesWeight,
+    };
+
+    await saveDiary(newDiary);
+    await setSelectedWorkout(undefined);
+    await setExercisesWeight([]);
+
+    navigation.goBack();
+  };
+
+  const handleAmountInputChange = (exercise: string, amount: number) => {
+    const exerciseWeightIndex = exercisesWeight.findIndex((ew) => ew.exercise === exercise);
+
+    if (exerciseWeightIndex !== -1) {
+      const newExercisesWeight = [...exercisesWeight];
+      newExercisesWeight[exerciseWeightIndex] = {
+        ...newExercisesWeight[exerciseWeightIndex],
+        value: amount,
+      };
+      setExercisesWeight(newExercisesWeight);
+    } else {
+      const newExerciseWeight: ExercisesWeightType = {
+        exercise,
+        value: amount,
+        unit: 'kg',
+      };
+      setExercisesWeight((prevExercisesWeight) => [...prevExercisesWeight, newExerciseWeight]);
+    }
+  };
+
+
+  const handleExerciseWeightChange = (exercise: string, value: number, unit: string) => {
+    const newExercisesWeight = exercisesWeight.map((exerciseWeight) => {
+      if (exerciseWeight.exercise === exercise) {
+        return {
+          ...exerciseWeight,
+          value,
+          unit,
+        };
+      }
+      return exerciseWeight;
+    });
+    setExercisesWeight(newExercisesWeight);
   };
 
   return (
@@ -46,7 +111,9 @@ const CreateDiary = ({ navigation }: NavigationProps) => {
       {isLoading ? (
         <Text>Loading...</Text>
       ) : (
-        <View style={styles.contentContainer}>
+        <LinearGradient colors={['#62c0ff', '#44a8eb', '#61bbf7']} style={styles.container}>
+
+        <ScrollView style={styles.contentContainer}>
           <Text style={styles.headerText}>Select a workout:</Text>
           <Picker
             selectedValue={selectedWorkout?.id}
@@ -63,26 +130,34 @@ const CreateDiary = ({ navigation }: NavigationProps) => {
           </Picker>
           <View>
           {
-            selectedWorkout?.exercises.map((exercise: string) => (
-              <View style={styles.exerciseContainer} key={exercise}>
-                <Text>{exercise}:</Text>
-                <InputExercise placeholder='Amount' onChangeText={() => console.log('Change')} />
-                 <Picker
-                  selectedValue={selectedUnit}
-                  onValueChange={(unit) => setSelectedUnit(unit)}
-                >
-                  <Picker.Item label="kg" value="kg" />
-                  <Picker.Item label="lbs" value="lbs" />
-                  <Picker.Item label="minutes" value="minutes" />
-                </Picker>
-              </View>
-            ))
+            selectedWorkout?.exercises.map((exercise: string) => {
+              const exerciseWeight = exercisesWeight.find((ew) => ew.exercise === exercise);
+              const currentAmount = exerciseWeight?.value || 0;
+              return (
+                <View style={styles.exerciseContainer} key={exercise}>
+                  <Text>{exercise}:</Text>
+                  <InputExercise
+                    placeholder='Amount'
+                    onChangeText={(amount) => handleAmountInputChange(exercise, parseInt(amount))}
+                  />
+                  <Picker
+                    selectedValue={exerciseWeight?.unit || 'kg'}
+                    onValueChange={(unit) => handleExerciseWeightChange(exercise, currentAmount, unit)}
+                  >
+                    <Picker.Item label="kg" value="kg" />
+                    <Picker.Item label="lbs" value="lbs" />
+                    <Picker.Item label="minutes" value="minutes" />
+                  </Picker>
+                </View>
+              );
+            })
           }
           </View>
           <View>
-            <DefaultScreenButton buttonName="Save" onPress={() => console.log('Add')} color='#1E90FF' />
+            <DefaultScreenButton buttonName="Save" onPress={handleSaveButtonPress} color='#1E90FF' />
           </View>
-        </View>
+        </ScrollView>
+        </LinearGradient>
       )}
     </View>
   );
@@ -102,8 +177,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
   },
   exerciseContainer: {
-    // flexDirection: 'row',
-    // alignItems: 'center',
     justifyContent: 'space-evenly',
   }
 });
