@@ -1,14 +1,13 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
-import { Ionicons } from '@expo/vector-icons';
-import { FontAwesome5, FontAwesome, AntDesign } from '@expo/vector-icons';
+import { FontAwesome5, FontAwesome, AntDesign, Ionicons, Octicons } from '@expo/vector-icons';
 
-import Diaries from '../screens/Diaries';
 import WorkoutNavigation from './WorkoutNavigation';
 import CurrentWorkout from '../screens/CreateDiary';
 const Tab = createBottomTabNavigator();
 import TabBarIconWrapper from '../components/TabBarIconWrapper/TabBarIconWrapper';
+import DiaryNavigation from './DiaryNavigation';
 
 const TabNavigator = () => {
   return (
@@ -26,11 +25,11 @@ const TabNavigator = () => {
       fontWeight: 'bold',
     },
     headerLeft: () => (
-      <Ionicons
-        name="aperture"
-        size={24}
+      <Octicons
+        name="zap"
+        size={30}
         color="white"
-        style={{ marginLeft: 10 }}
+        style={{ marginLeft: 20 }}
       />
     ),
     tabBarStyle: {
@@ -47,12 +46,13 @@ const TabNavigator = () => {
     tabBarInactiveTintColor: '#a6dcf0',
   }}
 >
-        <Tab.Screen name="Diary" component={Diaries} options={
+        <Tab.Screen name="DiaryStack" component={DiaryNavigation} options={
           {
             tabBarIcon: ({ color, size }) => (
               <FontAwesome name="calendar" size={size} color={color} />
             ),
-            tabBarLabel: 'Diary',
+            tabBarLabel: 'Diaries',
+            title: 'Diaries',
           }
         } />
         <Tab.Screen name="CurrentWorkout"

@@ -1,4 +1,4 @@
-import { DiariesScreenParams } from "./DiaryNavigation";
+import { DIaryItemParams, DiariesScreenParams } from "./DiaryNavigation";
 import { WorkoutReadScreenParams } from "./WorkoutNavigation";
 
 export type RootStackParamList = {
@@ -6,5 +6,6 @@ export type RootStackParamList = {
   WorkoutRead: WorkoutReadScreenParams;
   Workouts: undefined;
   Diaries: DiariesScreenParams;
+  DiaryRead: DIaryItemParams;
   CreateDiary: undefined;
 };

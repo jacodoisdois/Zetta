@@ -9,5 +9,6 @@ export type DiaryType = {
   createdAt: Date;
   diaryDate: string;
   workoutId: string;
+  workoutName: string;
   exercises: ExercisesWeightType[];
 };

@@ -16,3 +16,15 @@ export const saveDiary = async (diary: DiaryType): Promise<void> => {
     console.log('Error saving diary:', error);
   }
 };
+
+export const deleteDiaryById = async (id: string): Promise<void> => {
+  try{
+    const diaries: string | null = await retrieveData('diaries');
+    const diariesArray: DiaryType[] = diaries ? JSON.parse(diaries) : [];
+    const newDiariesArray = diariesArray.filter((diary: DiaryType) => diary.id !== id);
+    const diaryString = JSON.stringify(newDiariesArray);
+    await SecureStore.setItemAsync('diaries', diaryString);
+  }catch(error){
+    console.log('Error deleting diary:', error);
+  }
+};

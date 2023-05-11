@@ -7,19 +7,17 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack/lib/ty
 
 type AddAbsoluteButtonProps = {
   screenName: CreateScreens;
-  callBack?: () => void;
 };
 
-const AddAbsoluteButton: React.FC<AddAbsoluteButtonProps> = ({ screenName, callBack }: AddAbsoluteButtonProps) => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const navigator = useNavigation<NativeStackNavigationProp<any>>();
+const AddAbsoluteButton: React.FC<AddAbsoluteButtonProps> = ({ screenName }: AddAbsoluteButtonProps) => {
+  const navigator = useNavigation<NativeStackNavigationProp<never>>();
   const [isPressed, setIsPressed] = useState(false);
 
   const handleScreenNavigation = () => {
     setIsPressed(true);
     setTimeout(() => {
       setIsPressed(false);
-      navigator.navigate(screenName, { callBack });
+      navigator.navigate(screenName as never);
     }, 200);
   };
 
@@ -42,8 +40,9 @@ const styles = StyleSheet.create({
     bottom: 20,
     right: 20,
     backgroundColor: '#6bbcff',
-    padding: 10,
     borderRadius: 360,
+    alignItems: 'center',
+    justifyContent: 'center',
     ...Platform.select({
       ios: {
         shadowColor: 'black',
@@ -55,15 +54,20 @@ const styles = StyleSheet.create({
         elevation: 3,
       },
     }),
+    height: 60,
+    width: 60,
   },
   buttonPressed: {
     position: 'absolute',
     bottom: 20,
     right: 20,
     backgroundColor: '#6bbcff',
-    padding: 10,
     borderRadius: 360,
+    alignItems: 'center',
+    justifyContent: 'center',
     transform: [{ scale: 0.9 }],
+    height: 60,
+    width: 60,
   },
   buttonText: {
     color: 'white',

@@ -1,30 +1,29 @@
 import React from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { workoutType } from '../types/Workout/WorkoutType';
+import { DiaryType } from '../types/Diary/DiaryType';
 import DefaultScreenButton from '../components/DefaultScreenButton/DefaultScreenButton';
 import { ScrollView } from 'react-native-gesture-handler';
-import { deleteWorkoutById } from '../libs/SecureStore/Workout';
+import { deleteDiaryById } from '../libs/SecureStore/Diary';
 
-type WorkoutReadRouteParams = {
-  workout?: workoutType;
-  callBack?: () => void;
+type DiaryReadRouteParams = {
+  diary?: DiaryType;
 };
 
-export default function WorkoutRead() {
+export default function DiaryRead() {
   const route = useRoute();
-  const { workout }: WorkoutReadRouteParams = route.params as WorkoutReadRouteParams;
+  const { diary }: DiaryReadRouteParams = route.params as DiaryReadRouteParams;
   const navigator = useNavigation();
 
-  const handleDeleteWorkout = async () => {
-    await deleteWorkoutById(workout?.id || '');
-    navigator.navigate('Workouts' as never);
+  const handleDeleteDiary = async () => {
+    await deleteDiaryById(diary?.id || '');
+    navigator.navigate('Diaries' as never);
   };
 
-  if (!workout) {
+  if (!diary) {
     return (
       <View style={styles.container}>
-        <Text>No workout data available</Text>
+        <Text>No diary data available</Text>
       </View>
     );
   }
@@ -32,16 +31,16 @@ export default function WorkoutRead() {
   return (
     <View style={styles.container}>
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Workout - {workout.name}</Text>
+      <Text style={styles.title}>Diary - {diary.workoutName}</Text>
       <View style={styles.exercisesContainer}>
         <Text style={styles.exercisesText}>Exercises:</Text>
-        {workout.exercises.map((exercise, count) => (
-          <Text key={count}>{`${count + 1} - ${exercise}`}</Text>
+        {diary.exercises.map((exercise, count) => (
+          <Text key={count}>{`${exercise.exercise} - ${exercise.value} ${exercise.unit}  `}</Text>
         ))}
       </View>
     </ScrollView>
       <View style={styles.actionsContainer}>
-      <DefaultScreenButton buttonName="Delete" onPress={handleDeleteWorkout} color="#f83e3e" />
+      <DefaultScreenButton buttonName="Delete" onPress={handleDeleteDiary} color="#f83e3e" />
       </View>
     </View>
   );

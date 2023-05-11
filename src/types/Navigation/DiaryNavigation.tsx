@@ -14,6 +14,10 @@ export type DiariesProps = {
   navigation: DiariesScreenNavigationProps;
 };
 
+export type DIaryItemParams = {
+  diary: DiaryType;
+};
 
+export type DiaryItemScreenNavigationProp = StackNavigationProp<RootStackParamList, 'DiaryRead'>;
 export type DiariesScreenNavigationProps = StackNavigationProp<RootStackParamList, 'Diaries'>;
 export type CreateDiaryScreenNavigationProps = StackNavigationProp<RootStackParamList, 'CreateDiary'>;

@@ -10,12 +10,12 @@ const WorkoutItem: React.FC<WorkoutItemProps> = ({ workout }) => {
 
   const navigator = useNavigation<WorkoutItemScreenNavigationProp>();
 
-  const handleWorkoutPress = () => {
+  const handleWorkoutItemPress = () => {
     navigator.navigate("WorkoutRead", { workout });
   };
 
   return (
-    <TouchableOpacity style={styles.container} onPress={handleWorkoutPress} >
+    <TouchableOpacity style={styles.container} onPress={handleWorkoutItemPress} >
       <Text style={styles.titleText}>Workout - {workout.name || "N/A"}</Text>
       <Text>3
         {moment(workout.createdAt).format("DD/MM/YYYY HH:mm")}

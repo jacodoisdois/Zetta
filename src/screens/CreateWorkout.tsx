@@ -15,7 +15,7 @@ const CreateWorkout: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [exercises, setExercises] = useState<string[]>([]);
   const [workoutName, setWorkoutName] = useState<string>('');
-  const navigation = useNavigation();
+  const navigator = useNavigation();
 
 
   const handleInputExerciseChange = (inputName: string,exerciseName:string) => {
@@ -34,7 +34,7 @@ const CreateWorkout: React.FC = () => {
     };
     await addNewWorkout(workout);
     setInputExercises({});
-    navigation.goBack();
+    navigator.goBack();
   };
 
   const handleAddInput = () => {

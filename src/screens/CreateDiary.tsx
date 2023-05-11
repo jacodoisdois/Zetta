@@ -62,6 +62,7 @@ const CreateDiary = ({ navigation }: CreateDiaryProps) => {
       diaryDate: formatDate(date),
       workoutId: selectedWorkout?.id || '',
       exercises: exercisesWeight,
+      workoutName: selectedWorkout?.name || '',
     };
 
     await saveDiary(newDiary);
@@ -124,7 +125,7 @@ const CreateDiary = ({ navigation }: CreateDiaryProps) => {
             {workouts.map((workout) => (
               <Picker.Item
                 key={workout.id}
-                label={workout.name}
+                label={`Workout - ${workout.name}`}
                 value={workout.id}
               />
             ))}
@@ -189,6 +190,7 @@ const styles = StyleSheet.create({
     borderColor: 'white',
     marginVertical: 10,
     borderRadius: 5,
+    backgroundColor: '#2283dddd',
   },
   exerciseText:{
     color: 'white',
