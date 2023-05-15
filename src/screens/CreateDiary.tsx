@@ -120,8 +120,8 @@ const CreateDiary = ({ navigation }: CreateDiaryProps) => {
             selectedValue={selectedWorkout?.id}
             onValueChange={handleSelectWorkout}
             itemStyle={styles.pickerText}
+            style={styles.picker}
           >
-            <Picker.Item />
             {workouts.map((workout) => (
               <Picker.Item
                 key={workout.id}
@@ -141,6 +141,7 @@ const CreateDiary = ({ navigation }: CreateDiaryProps) => {
                   <InputExercise
                     placeholder='Amount'
                     onChangeText={(amount) => handleAmountInputChange(exercise, parseInt(amount))}
+                    keyboardType='numeric'
                   />
                   <Picker
                     selectedValue={exerciseWeight?.unit || 'kg'}
@@ -149,7 +150,6 @@ const CreateDiary = ({ navigation }: CreateDiaryProps) => {
                     itemStyle={styles.pickerText}
                   >
                     <Picker.Item label="kg" value="kg" />
-                    <Picker.Item label="lbs" value="lbs" />
                     <Picker.Item label="minutes" value="minutes"/>
                   </Picker>
                 </View>

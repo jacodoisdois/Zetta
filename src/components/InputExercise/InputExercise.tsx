@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { TextInput, StyleSheet } from 'react-native';
+import { TextInput, StyleSheet, TouchableWithoutFeedback, Keyboard  } from 'react-native';
 
 type InputExerciseProps = {
   placeholder: string;
   onChangeText: (value: string) => void;
+  keyboardType?: 'default' | 'numeric';
 };
 
-const InputExercise: React.FC<InputExerciseProps> = ({ placeholder, onChangeText }) => {
+const InputExercise: React.FC<InputExerciseProps> = ({ placeholder, onChangeText, keyboardType }) => {
   const [isFocused, setIsFocused] = useState(false);
 
 
@@ -19,6 +20,7 @@ const InputExercise: React.FC<InputExerciseProps> = ({ placeholder, onChangeText
   };
 
   return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <TextInput
       style={[styles.input, isFocused && styles.inputFocused]}
       placeholder={placeholder}
@@ -26,7 +28,9 @@ const InputExercise: React.FC<InputExerciseProps> = ({ placeholder, onChangeText
       onChangeText={onChangeText}
       onFocus={handleFocus}
       onBlur={handleBlur}
+      keyboardType={keyboardType}
     />
+    </TouchableWithoutFeedback>
   );
 };
 
