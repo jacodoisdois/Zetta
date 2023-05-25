@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { TextInput, StyleSheet, TouchableWithoutFeedback, Keyboard  } from 'react-native';
 
 type InputExerciseProps = {
-  placeholder: string;
+  placeholder?: string;
   onChangeText: (value: string) => void;
   keyboardType?: 'default' | 'numeric';
 };

@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import InputExercise from '../components/InputExercise/InputExercise';
 import DefaultScreenButton from '../components/DefaultScreenButton/DefaultScreenButton';
-import { workoutType } from '../types/Workout/WorkoutType';
+import { muscles, workoutType } from '../types/Workout/WorkoutType';
 import {v4 as uuidv4} from 'uuid';
 import 'react-native-get-random-values';
 import { useNavigation } from '@react-navigation/native';
@@ -14,7 +14,9 @@ const CreateWorkout: React.FC = () => {
   const [inputExercises, setInputExercises] = useState<{ [key: string]: string }>({});
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [exercises, setExercises] = useState<string[]>([]);
+  const [targetMuscles, setTargetMuscles] = useState<muscles[]>([]);
   const [workoutName, setWorkoutName] = useState<string>('');
+  const [workoutDescription, setWorkoutDescription] = useState<string>('');
   const navigator = useNavigation();
 
 
@@ -29,6 +31,8 @@ const CreateWorkout: React.FC = () => {
     const workout : workoutType = {
       id: uuidv4(),
       name: workoutName,
+      description: workoutDescription,
+      targetMuscles: [],
       exercises: nonEmptyInputs,
       createdAt: new Date(),
     };
@@ -37,7 +41,15 @@ const CreateWorkout: React.FC = () => {
     navigator.goBack();
   };
 
-  const handleAddInput = () => {
+  const handleTargetMuscles = async (muscle: muscles) => {
+    if (targetMuscles.includes(muscle)) {
+      await setTargetMuscles((prevTargetMuscles) => prevTargetMuscles.filter((m) => m !== muscle));
+    } else {
+      await setTargetMuscles((prevTargetMuscles) => [...prevTargetMuscles, muscle]);
+    }
+  };
+
+  const handleAddInput =  () => {
     const inputCount = Object.keys(inputExercises).length;
     const newInputName = `input${inputCount + 1}`;
     setInputExercises((prevInputValues) => ({ ...prevInputValues, [newInputName]: '' }));
@@ -51,6 +63,13 @@ const CreateWorkout: React.FC = () => {
       <View style={styles.contentContainer}>
         <Text style={styles.contentHeaderText}>Workout Name:</Text>
         <InputExercise placeholder='Set the workout name' onChangeText={setWorkoutName} />
+
+        <Text style={styles.contentHeaderText}>Description:</Text>
+        <InputExercise onChangeText={setWorkoutDescription} />
+
+        <Text style={styles.contentHeaderText}>Description:</Text>
+
+
 
           <Text style={styles.contentHeaderText}>Exercises:</Text>
 

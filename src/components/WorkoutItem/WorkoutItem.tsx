@@ -17,8 +17,8 @@ const WorkoutItem: React.FC<WorkoutItemProps> = ({ workout }) => {
   return (
     <TouchableOpacity style={styles.container} onPress={handleWorkoutItemPress} >
       <Text style={styles.titleText}>Workout - {workout.name || "N/A"}</Text>
-      <Text>3
-        {moment(workout.createdAt).format("DD/MM/YYYY HH:mm")}
+      <Text>
+        Created At: {moment(workout.createdAt).format("DD/MM/YYYY HH:mm")}
       </Text>
     </TouchableOpacity>
   );
@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
   titleText: {
     fontWeight: "bold",
     fontSize: 20,
+    textAlign: "center",
   },
 });
 
