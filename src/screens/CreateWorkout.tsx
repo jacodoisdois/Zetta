@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import InputExercise from '../components/InputExercise/InputExercise';
@@ -24,10 +24,6 @@ const CreateWorkout: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [errors, setErrors] = useState<string[]>([]);
   const navigator = useNavigation();
-
-  useEffect(()=>{
-    console.log(exercises);
-  }, [exercises]);
 
   const validateFormAndShowToast = () => {
     const newErrors = [];
@@ -71,7 +67,7 @@ const CreateWorkout: React.FC = () => {
   };
 
 
-  const handleSaveWorkout = async () => {
+  const handleSaveWorkout = () => {
     const nonEmptyInputs = Object.values(inputExercises).filter(
       (value) => value.trim() !== ''
     );
@@ -94,7 +90,7 @@ const CreateWorkout: React.FC = () => {
     };
 
 
-    await addNewWorkout(workout);
+    addNewWorkout(workout);
     setInputExercises({});
     navigator.goBack();
   };
