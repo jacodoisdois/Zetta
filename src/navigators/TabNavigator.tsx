@@ -19,7 +19,7 @@ const TabNavigator = () => {
       shadowOpacity: 0,
       elevation: 0,
     },
-    headerTintColor: 'white',
+    headerTintColor: '#fafafa',
     headerTitleAlign: 'center',
     headerTitleStyle: {
       fontWeight: 'bold',
@@ -42,7 +42,7 @@ const TabNavigator = () => {
       alignItems: 'center',
     },
     tabBarLabelStyle: {},
-    tabBarActiveTintColor: 'white',
+    tabBarActiveTintColor: '#fafafa',
     tabBarInactiveTintColor: '#a6dcf0',
   }}
 >

@@ -9,7 +9,6 @@ import AddAbsoluteButton from "../components/AddAbsoluteButton/AddAbsoluteButton
 import { LinearGradient } from "expo-linear-gradient";
 import { WorkoutsProps } from "../types/Navigation/WorkoutNavigation";
 
-
 const Workouts = ({ navigation } : WorkoutsProps) => {
   const [workouts, setWorkouts] = useState<Array<workoutType>>([]);
   const [isLoading, setIsLoading] = useState(true);

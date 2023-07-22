@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   optionText: {
-    color: 'white',
+    color: '#fafafa',
     fontWeight: 'bold',
   },
 });

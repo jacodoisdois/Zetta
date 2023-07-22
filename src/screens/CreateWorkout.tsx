@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import InputExercise from '../components/InputExercise/InputExercise';
@@ -10,6 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 import { addNewWorkout } from '../libs/SecureStore/Workout';
 import { ScrollView } from 'react-native-gesture-handler';
 import MuscleOptions from '../components/TargetMuscleCheckbox/TargetMuscleCheckbox';
+import Toast from 'react-native-toast-message';
 
 const CreateWorkout: React.FC = () => {
   const [inputExercises, setInputExercises] = useState<{
@@ -20,7 +21,44 @@ const CreateWorkout: React.FC = () => {
   const [activeMuscles, setActiveMuscles] = useState<muscles[]>([]);
   const [workoutName, setWorkoutName] = useState<string>('');
   const [workoutDescription, setWorkoutDescription] = useState<string>('');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [errors, setErrors] = useState<string[]>([]);
   const navigator = useNavigation();
+
+  useEffect(()=>{
+    console.log(exercises);
+  }, [exercises]);
+
+  const validateFormAndShowToast = () => {
+    const newErrors = [];
+
+    if (!workoutName) newErrors.push('Workout name cannot be null or empty');
+    if (!workoutDescription) newErrors.push('Workout description cannot be null or empty');
+    if (activeMuscles.length === 0) newErrors.push('You must select at least one target muscle');
+
+    const nonEmptyInputs = Object.values(inputExercises).filter(
+      (value) => value.trim() !== ''
+    );
+
+    if (nonEmptyInputs.length <= 0) newErrors.push('You must fill at least one exercise');
+
+    setErrors(newErrors);
+
+    if (newErrors.length > 0) {
+      const errorMessage = newErrors.join('\n');
+
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: errorMessage,
+      });
+
+      return false;
+    }
+
+    return true;
+  };
+
 
   const handleInputExerciseChange = (
     inputName: string,
@@ -32,11 +70,19 @@ const CreateWorkout: React.FC = () => {
     }));
   };
 
+
   const handleSaveWorkout = async () => {
     const nonEmptyInputs = Object.values(inputExercises).filter(
       (value) => value.trim() !== ''
     );
+
     setExercises(nonEmptyInputs);
+
+    const isValid = validateFormAndShowToast();
+
+    if (!isValid) {
+      return;
+    }
 
     const workout: workoutType = {
       id: uuidv4(),
@@ -46,6 +92,8 @@ const CreateWorkout: React.FC = () => {
       exercises: nonEmptyInputs,
       createdAt: new Date(),
     };
+
+
     await addNewWorkout(workout);
     setInputExercises({});
     navigator.goBack();
@@ -129,12 +177,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     alignSelf: 'center',
     marginVertical: 15,
-    color: 'white',
+    color: '#fafafa',
   },
   contentHeaderText: {
     fontWeight: '700',
     fontSize: 16,
-    color: 'white',
+    color: '#fafafa',
     marginBottom: 15,
   },
   contentContainer: {
@@ -148,6 +196,9 @@ const styles = StyleSheet.create({
   scrollViewContent: {
     height: 'min-content',
   },
+  toastContainer: {
+    minHeight: 100
+  }
 });
 
 export default CreateWorkout;

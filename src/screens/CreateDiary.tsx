@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     alignSelf: 'center',
     marginVertical: 15,
-    color: 'white',
+    color: '#fafafa',
   },
   contentContainer: {
     marginHorizontal: 20,
@@ -187,18 +187,18 @@ const styles = StyleSheet.create({
   picker:{
     borderStyle: 'solid',
     borderWidth: 1,
-    borderColor: 'white',
+    borderColor: '#fafafa',
     marginVertical: 10,
     borderRadius: 5,
     backgroundColor: '#2283dddd',
   },
   exerciseText:{
-    color: 'white',
+    color: '#fafafa',
     fontWeight: 'bold',
     fontSize: 16,
   },
   pickerText: {
-    color: 'white',
+    color: '#fafafa',
   }
 });
 

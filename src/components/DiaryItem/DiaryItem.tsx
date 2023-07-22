@@ -18,11 +18,11 @@ const DiaryItem: React.FC<DiaryItemProps>= ({ diary }) => {
   return (
     <TouchableOpacity style={styles.container} onPress={handleDiaryItemPress}>
       <View style={styles.iconContainer}>
-      <MaterialIcons name="done-all" size={50} color="black"  style={styles.iconStyle}/>
+      <MaterialIcons name="done-all" size={50} color="#444444" />
       </View>
       <View style={styles.contentContainer}>
-        <Text style={styles.titleText}>Diary - {moment(diary.createdAt).format("DD/MM/YYYY HH:mm")}</Text>
-        <Text style={styles.footerContent}>Workout: {diary.workoutName || "N/A"}</Text>
+        <Text style={[styles.titleText, styles.defaultFont]}>Diary - {moment(diary.createdAt).format("DD/MM/YYYY HH:mm")}</Text>
+        <Text style={[styles.footerContent, styles.defaultFont]}>Workout: {diary.workoutName || "N/A"}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     ...Platform.select({
       ios: {
-        shadowColor: "black",
+        shadowColor: "#444444",
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.3,
         shadowRadius: 4,
@@ -55,13 +55,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around'
   },
   footerContent:{
-    fontStyle: 'italic'
   },
   iconContainer: {
     justifyContent: 'center',
     marginRight: 10,
     borderRightStyle: 'solid',
     borderRightWidth: 1,
+    borderRightColor: '#444444',
     paddingRight: 10
   },
   titleText: {
@@ -69,8 +69,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: 'center'
   },
-  iconStyle:{
-
+  defaultFont:{
+    color: '#444444'
   }
 });
 

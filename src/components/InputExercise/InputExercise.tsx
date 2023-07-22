@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     borderColor: '#CCCCCC',
     paddingHorizontal: 10,
     fontSize: 16,
-    color: 'white',
+    color: '#fafafa',
     marginVertical: 10,
   },
   inputFocused: {

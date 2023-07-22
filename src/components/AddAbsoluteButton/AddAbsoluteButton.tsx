@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     ...Platform.select({
       ios: {
-        shadowColor: 'black',
+        shadowColor: '#444444',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
         shadowRadius: 4,
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     width: 60,
   },
   buttonText: {
-    color: 'white',
+    color: '#fafafa',
     fontWeight: 'bold',
     fontSize: 16,
   },
